@@ -32,7 +32,7 @@ List of radios managing
 At the first start a few stations will be available. The list of stations
 can be altered by accessing the address of the radio,
 readable on the OLED screen by means of a browser.
-stations can be:
+Stations can be:
 - added;
 - deleted singularly and in group;
 - reordered moving each station in a new position in list;

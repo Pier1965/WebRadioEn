@@ -3,8 +3,12 @@
 .vscode/launch.json
 .vscode/ipch
 .*
-!/.gitignore
-*~
 sinc.sh
+git_codeberg/
+git_github/
+*.o
+*~
+/*~
+
 
 
