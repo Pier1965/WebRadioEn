@@ -68,7 +68,11 @@ Otto baroque si sente a volte bene e a volte con singhiozzo a buffer 64, con 32 
     riga 38)  #define HTTP_DOWNLOAD_UNIT_SIZE 3*1436
     riga 41)  #define HTTP_UPLOAD_BUFLEN 3*1436
     01/04/2024
-    Da fare
+25)	Aggiunto schermo touch NEXTION NX4832T035_011
+	25/04/2024
+    Da fare:
+    Aggiungere verifica sulla coerenza dei dati Pos.1 Pos.2 immessi per la modifica
+    della lista di radio.
     Evitare che all'upload della lista di radio si passi alla
     pagina /upload
     Impostare schermo OLED con caratteri grandi indicazione volume e stazione
@@ -93,6 +97,10 @@ void setup(){
   confSelector();
   //Setup OLED : Strano... se messo dopo setupInt fa incartare l'ascolto
   initSCR();
+  // Inizializzazione del NEXTION se usato
+  #ifdef NEXTOUCH
+    nexExists = initNex();
+  #endif
   // Avvio del wifi. Se non c'è una configurazione ESSD e PW avvia AP su 192.168.1.4
   // per immettere i valori di rete e ip della radio via browser
   // Se non vengono immessi attende 120 sec, va in timeout e si riavvia.
@@ -170,7 +178,12 @@ void setup(){
     DEBUG_PRINTLN("Disconnessione e spegnimento WiFi...");
     WiFi.disconnect(true);
     WiFi.mode(WIFI_OFF);
-    updateTimeScr();
+    #ifdef OLEDJMDO
+      updateTimeScr();
+    #endif
+    #ifdef NEXTOUCH
+      updateTimeScr_nex();
+    #endif
   }else{
     stream.setVolume(VOLUME);
     JsonObject record = radioRecords[STATION].as<JsonObject>();
@@ -183,7 +196,12 @@ void setup(){
       DEBUG_PRINT("bitrate: ");
       DEBUG_PRINT(stream.bitrate());
       DEBUG_PRINTLN("kbps");
-    updateSCR();
+      #ifdef OLEDJMDO
+        updateSCR();
+      #endif
+      #ifdef NEXTOUCH
+        updateSCR_nex();
+      #endif
   }
   oldWMode=WMode;
 }
@@ -241,10 +259,20 @@ void loop() {
         }
         DEBUG_PRINTDEC(STATION);
         DEBUG_PRINTLN();
-        updateSCR();
+        #ifdef OLEDJMDO
+          updateSCR();
+        #endif
+        #ifdef NEXTOUCH
+          updateSCR_nex();
+        #endif
       }
       delay(500);
-      updateSCR();
+      #ifdef OLEDJMDO
+        updateSCR();
+      #endif
+      #ifdef NEXTOUCH
+        updateSCR_nex();
+      #endif
     }else{
       // RADIO -> CLOCK
       //=================================================================================
@@ -254,7 +282,12 @@ void loop() {
       stream.stopSong();
       WiFi.disconnect(true);
       WiFi.mode(WIFI_OFF);
-      updateTimeScr();
+      #ifdef OLEDJMDO
+        updateTimeScr();
+      #endif
+      #ifdef NEXTOUCH
+        updateTimeScr_nex();
+      #endif
     }
   }
   //=================================================================================
@@ -275,6 +308,11 @@ void loop() {
       // Gestione radio in modalità playing
       stream.loop();
       delay(5);
+      // check dei comandi NEXTION
+      #ifdef NEXTOUCH
+        if(nexExists)
+          nexLoop(nex_list);
+      #endif
       //Check dei tasti e dei comandi IR
       checkIR();
       switch (checkButtons()) {
@@ -307,17 +345,32 @@ void loop() {
           }
           DEBUG_PRINTDEC(STATION);
           DEBUG_PRINTLN();
-          updateSCR();
+          #ifdef OLEDJMDO
+            updateSCR();
+          #endif
+          #ifdef NEXTOUCH
+            updateSCR_nex();
+          #endif
         break;
         case VOLCH:
           stream.setVolume(VOLUME);
           DEBUG_PRINTDEC(VOLUME);
           DEBUG_PRINTLN();
-          updateSCR();
+          #ifdef OLEDJMDO
+            updateSCR();
+          #endif
+          #ifdef NEXTOUCH
+            updateSCR_nex();
+          #endif
         break;
       }
       if(checkTime()){
-        updateSCR();
+        #ifdef OLEDJMDO
+          updateSCR();
+        #endif
+        #ifdef NEXTOUCH
+          updateSCR_nex();
+        #endif
       }
     }
   }else{
@@ -327,7 +380,12 @@ void loop() {
     while(!digitalRead(RCSelector)){
       // Gestione radio in modalità orologio
       if(checkTime()){
+        #ifdef OLEDJMDO
         updateTimeScr();
+      #endif
+      #ifdef NEXTOUCH
+        updateTimeScr_nex();
+      #endif
       }
       // In modalità CLOCK schiacciando Volume Up si richiede
       // l'avvio del portale 192.168.4.1 per la gestione

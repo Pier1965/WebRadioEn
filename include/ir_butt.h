@@ -3,7 +3,7 @@
 //#define ELEGO_IR
 //#define SAMS_IR
 //#define CARMP3
-//#define PHILIPS-RC5340
+//#define PHILIPSRC5340
 #define KC808
 //#define TANIX //SMART TV BOX TANIX TX5 MAX
 //
@@ -67,7 +67,7 @@
   #define IR_100 0xFF9867
   #define IR_200 0xFFB04F
 #endif
-#ifdef PHILIPS-RC5340
+#ifdef PHILIPSRC5340
   #define IR_UP 0x10458
   #define IR_DN 0x10459
   #define IR_NX 0x1045B

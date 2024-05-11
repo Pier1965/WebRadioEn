@@ -45,8 +45,10 @@ void IRAM_ATTR volumeDownInterrupt() {
     unsigned long interrupt_time = millis();
     portENTER_CRITICAL_ISR(&mux);
         if (interrupt_time - last_interrupt_time > debT){
-            if(VOLUME>0)
-                VOLUME-=DVOL;
+            if(VOLUME > DVOL)
+                VOLUME -= DVOL;
+            else
+                VOLUME = 0;
             last_interrupt_time = interrupt_time;
         }
     portEXIT_CRITICAL_ISR(&mux);
@@ -57,13 +59,15 @@ void IRAM_ATTR volumeUpInterrupt(){
     unsigned long interrupt_time = millis();
     portENTER_CRITICAL_ISR(&mux);
         if (interrupt_time - last_interrupt_time > debT){
-            if(VOLUME<100)
-                VOLUME+=DVOL;
-                last_interrupt_time = interrupt_time;
+            if(VOLUME < (100 - DVOL))
+                VOLUME += DVOL;
+            else
+                VOLUME = 100;
+            last_interrupt_time = interrupt_time;
         }
     portEXIT_CRITICAL_ISR(&mux);
 }
-// Gestione pulsanti via interrupt cambio canale
+// Gestione pulsanti via interrupt cambio canale e volume
 
 void setupInt(){
   pinMode(previousButton, INPUT_PULLUP);

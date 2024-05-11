@@ -61,4 +61,18 @@ JsonArray radioAlterate = jsonDoc_rx.to<JsonArray>();
 JsonObject record;
 // Oggetto json stringhificato per comunicazione via websocket
 String jsonString = "";
+// Oggetti del display touch NEXTION
+#ifdef NEXTOUCH
+  NexButton pvsBtn = NexButton(0, 2, "b1");
+  NexButton nxtBtn = NexButton(0, 3, "b2");
+  NexButton vdnBtn = NexButton(0, 4, "b3");
+  NexButton vupBtn = NexButton(0, 5, "b4");
+  NexTouch *nex_list[] = {
+    &pvsBtn,
+    &nxtBtn,
+    &vdnBtn,
+    &vupBtn,
+    NULL
+  };
+#endif
 

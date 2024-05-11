@@ -59,5 +59,5 @@ const int volumeDown      	= 33;
 #endif
 //IR sensor
 //Infrarosso collegato a Pin Esp32
-const unsigned int kRecvPin		= 26;
+const unsigned int kRecvPin		= 13; //26;
 

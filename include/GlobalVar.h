@@ -38,3 +38,5 @@ const char *url;
 unsigned long startWsMillis = 0;
 unsigned long currentWsMillis = 0;
 const unsigned long updateWsTime = 60000; // aggiornamento websocket 
+// Inizializzazione NEXTION
+bool nexExists = false;

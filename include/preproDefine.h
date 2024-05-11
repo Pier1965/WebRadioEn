@@ -15,3 +15,5 @@
 // Testare il file delle stazioni memorizzate
 // se settato cancella il file delle radio al riavvio
 //#define TESTRADIOFILE
+// Uso del display NEXTION Touch
+#define NEXTOUCH

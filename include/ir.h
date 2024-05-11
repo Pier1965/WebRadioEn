@@ -103,19 +103,23 @@ void checkIR(){
           case IR_UP_ALT: 
         #endif
           DEBUG_PRINTLN("Volume UP");
-          if(VOLUME < 100)
+          if(VOLUME < (100 - DVOL))
             VOLUME += DVOL;
+          else
+            VOLUME = 100;
             // Se arriva un comando disabilito il successivo controllo dei numeri
-            chkNmbr = false;
+          chkNmbr = false;
         break;
         case IR_DN:
         #ifdef TANIX
           case IR_DN_ALT:
         #endif
           DEBUG_PRINTLN("volume DOWN");
-          if(VOLUME>0)
+          if(VOLUME > DVOL)
             VOLUME -= DVOL;
-            chkNmbr = false;
+          else
+            VOLUME = 0;
+          chkNmbr = false;
         break;
         case IR_NX:
           DEBUG_PRINTLN("Next");
@@ -123,9 +127,9 @@ void checkIR(){
             STATION++;
           else
             STATION = 0;
-            nxtButton = 1;
-            prvButton = 0;
-            chkNmbr = false;
+          nxtButton = 1;
+          prvButton = 0;
+          chkNmbr = false;
         break;
         case IR_PV:
           DEBUG_PRINTLN("PREV");
@@ -133,9 +137,9 @@ void checkIR(){
               STATION--;
             else
               STATION = NR-1;
-              nxtButton = 0;
-              prvButton = 1;
-              chkNmbr = false;
+            nxtButton = 0;
+            prvButton = 1;
+            chkNmbr = false;
         break;
         case IR_RS:
           DEBUG_PRINTLN("RESET");

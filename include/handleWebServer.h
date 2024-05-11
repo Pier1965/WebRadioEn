@@ -17,8 +17,8 @@ void webSocketEvent(byte num, WStype_t type, uint8_t * payload, size_t length){
       return;
     } else {
       DEBUG_PRINTLN("Gestione pacchetto jsonDoc_rx ricevuto da client");
-      const int msg_pos1  = jsonDoc_rx["pos1"];
-      const int msg_pos2  = jsonDoc_rx["pos2"];
+      int msg_pos1  = jsonDoc_rx["pos1"];
+      int msg_pos2  = jsonDoc_rx["pos2"];
       const char* msg_url = jsonDoc_rx["url"];
       const char* msg_cmd = jsonDoc_rx["cmd"];
       const char* msg_nome = jsonDoc_rx["nome"];
@@ -34,14 +34,17 @@ void webSocketEvent(byte num, WStype_t type, uint8_t * payload, size_t length){
       String s_msg_cmd = (String) msg_cmd;
       if(s_msg_cmd == "play"){
         DEBUG_PRINTLN("Comando play");
-        if(msg_pos1 < NR)
-          STATION = msg_pos1;
+        if(abs(msg_pos1) < NR)
+          STATION = abs(msg_pos1);
         return;
       }
       if(s_msg_cmd == "vol"){
         DEBUG_PRINTLN("Comando vol");
+        msg_pos1 = abs(msg_pos1);
         if(msg_pos1 <= 100)
           VOLUME = msg_pos1;
+        else
+          VOLUME = 100;
         return;
       }
       if(s_msg_cmd == "add"){
