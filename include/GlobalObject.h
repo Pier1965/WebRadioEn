@@ -9,7 +9,14 @@ portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
 IRrecv irrecv(kRecvPin);
 decode_results results;
 // Oled Display
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+#ifdef OLEDJMDO
+  Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+#endif
+// Display TFT 2.8 ST7789
+#ifdef ST7789
+  Arduino_DataBus *bus = new Arduino_ESP32SPI(TFT_DC /* DC */, TFT_CS /* CS */, TFT_SCL /* SCK */, TFT_SDA /* MOSI */, GFX_NOT_DEFINED /* MISO */, VSPI /* spi_num */);
+  Arduino_GFX *display = new Arduino_ST7789(  bus, TFT_RST /* RST */, 0 /* rotation */);
+#endif
 // Ora data
 // Inserire qui la timezone come da ->  https://github.com/nayarsystems/posix_tz_db/blob/master/zones.csv
 // Europe/Rome 	CET-1CEST,M3.5.0,M10.5.0/3
@@ -61,4 +68,18 @@ JsonArray radioAlterate = jsonDoc_rx.to<JsonArray>();
 JsonObject record;
 // Oggetto json stringhificato per comunicazione via websocket
 String jsonString = "";
+// Oggetti del display touch NEXTION
+#ifdef NEXTOUCH
+  NexButton pvsBtn = NexButton(0, 2, "b1");
+  NexButton nxtBtn = NexButton(0, 3, "b2");
+  NexButton vdnBtn = NexButton(0, 4, "b3");
+  NexButton vupBtn = NexButton(0, 5, "b4");
+  NexTouch *nex_list[] = {
+    &pvsBtn,
+    &nxtBtn,
+    &vdnBtn,
+    &vupBtn,
+    NULL
+  };
+#endif
 

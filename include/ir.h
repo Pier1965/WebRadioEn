@@ -30,7 +30,7 @@ void checkIR(){
   static bool firstDigit = false;
   // Numero di digit ricevuti nel tempo di "ascolto" dei pulsanti
   static unsigned char digitIrCount = 0;
-  // Se il timer di accettazione dei tasti è in funzione ma è scaduto
+  // Se il timer di accettazione dei tasti numerici è in funzione ma è scaduto
   // se ci sono caratteri numerici aggiorno stazione resetto tutto e torno
   if(timerIrStarted){
     timeIrElapsed = millis() - timerIrStartedAt;
@@ -102,46 +102,71 @@ void checkIR(){
         #ifdef TANIX 
           case IR_UP_ALT: 
         #endif
+        #ifdef ZODIAC
+          case IR_UP1:
+        #endif
           DEBUG_PRINTLN("Volume UP");
-          if(VOLUME < 100)
+          if(VOLUME < (100 - DVOL))
             VOLUME += DVOL;
+          else
+            VOLUME = 100;
             // Se arriva un comando disabilito il successivo controllo dei numeri
-            chkNmbr = false;
+          chkNmbr = false;
         break;
         case IR_DN:
         #ifdef TANIX
           case IR_DN_ALT:
         #endif
+        #ifdef ZODIAC
+          case IR_DN1:
+        #endif
           DEBUG_PRINTLN("volume DOWN");
-          if(VOLUME>0)
+          if(VOLUME > DVOL)
             VOLUME -= DVOL;
-            chkNmbr = false;
+          else
+            VOLUME = 0;
+          chkNmbr = false;
         break;
         case IR_NX:
+        #ifdef ZODIAC
+          case IR_NX1:
+        #endif
           DEBUG_PRINTLN("Next");
           if(STATION<NR-1)
             STATION++;
           else
             STATION = 0;
-            nxtButton = 1;
-            prvButton = 0;
-            chkNmbr = false;
+          nxtButton = 1;
+          prvButton = 0;
+          chkNmbr = false;
         break;
         case IR_PV:
+        #ifdef ZODIAC
+          case IR_PV1:
+        #endif
           DEBUG_PRINTLN("PREV");
             if(STATION>0)
               STATION--;
             else
               STATION = NR-1;
-              nxtButton = 0;
-              prvButton = 1;
-              chkNmbr = false;
+            nxtButton = 0;
+            prvButton = 1;
+            chkNmbr = false;
         break;
+        #ifdef ZODIAC
+          case IR_RS1:
+            delay(1000);
+            updateEeprom();
+            WMode = !WMode;
+            DEBUG_PRINTLN("Cambio modalità di funzionamento");
+          break; 
+        #endif
         case IR_RS:
-          DEBUG_PRINTLN("RESET");
+          DEBUG_PRINTLN("Cambio modalità di funzionamento");
           delay(1000);
           updateEeprom();
-          ESP.restart();
+          //ESP.restart(); Tasto di spegnimento del telecomando x reset
+          WMode = !WMode;
         break;
         default:
           /*
@@ -156,7 +181,7 @@ void checkIR(){
       // Elaborazione dei codici numerici con i telecomandi forniti
       // di tastierino (CarMp3 funziona a cazzo di cane)
       // Funzionano solo nella finestra irTimeWait per un massino di 2 caratteri
-      #if defined(ELEGO_IR) || defined(CARMP3) || defined(KC808) || defined(TANIX)
+      #if defined(ELEGO_IR) || defined(CARMP3) || defined(KC808) || defined(TANIX) || defined(ZODIAC)
       switch (results.value) {
         case IR_00:
         DEBUG_PRINTLN("IR_00");
@@ -243,4 +268,30 @@ void checkIR(){
     // Scarica il buffer e preparati a ricevere il prossimo
     irrecv.resume();
   }
+}
+//-----------------------------------------------------------------------------------
+// Controllo del cambio stato clock <-> radio in modalità clock del solo tasto reset
+bool checkReset(){
+  // Inviato codice IR?
+  if (irrecv.decode(&results)) {
+    // Utile per testare i codici di un nuovo telecomando
+    #ifdef SPION
+      DEBUG_PRINTLN("Ir attivato...");
+      DEBUG_PRINT("Codice IR: ");
+      serialPrintUint64(results.value, HEX);
+      DEBUG_PRINTLN("");
+    #endif
+    if(results.value==IR_RS) {
+      WMode = !WMode;
+      DEBUG_PRINTLN("Cambio modalità di funzionamento");
+    }
+    #ifdef ZODIAC
+      if(results.value==IR_RS1) {
+        WMode = !WMode;
+        DEBUG_PRINTLN("Cambio modalità di funzionamento");
+      }
+    #endif
+    irrecv.resume();
+  }
+  return(WMode);
 }

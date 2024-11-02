@@ -14,4 +14,5 @@
 #endif
 // Testare il file delle stazioni memorizzate
 // se settato cancella il file delle radio al riavvio
-//#define TESTRADIOFILE
+// #define TESTRADIOFILE
+

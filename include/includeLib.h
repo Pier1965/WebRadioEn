@@ -8,8 +8,14 @@
 #include <stdbool.h>
 #include <SPI.h>
 // Oled Display
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+#ifdef OLEDJMDO
+    #include <Adafruit_GFX.h>
+    #include <Adafruit_SSD1306.h>
+#endif
+#ifdef ST7789
+    #include <Arduino_GFX_Library.h>
+    #include <font/FreeSans12pt7b.h>
+#endif
 // Decoder mp3 e stream
 #include <VS1053.h>               /* https://github.com/baldram/ESP_VS1053_Library */
 #include <ESP32_VS1053_Stream.h>
@@ -32,3 +38,7 @@
 #include "FS.h"
 #include <SPIFFS.h>
 #include <ArduinoJson.h>
+// Gestione display touch NEXTION NX4832T035_011
+#ifdef NEXTOUCH
+    #include<Nextion.h>
+#endif

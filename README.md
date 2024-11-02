@@ -1,4 +1,5 @@
-Esp32 web radio
+# MonCafeRadio
+Esp32 web/FM radio
 ---------------
 
 This is a esp32 based web radio.
@@ -12,7 +13,7 @@ The following files could/should be altered in order to personalize the compilat
 process. This latter can been performed relying on VS code and the Platformio plugin:
 - platformio.ini (set the esp32 model);
 - include/gpio.h (for different pinout configuration);
-- include/define.h (change OLED dimensions and pinout);
+- include/define.h (change OLED dimensions and pinout, enable use of NEXTION touch);
 - nclude/ir_butt.h (setting the IR remote control);
 - include/preproDefine.h (to set debug option);
 - include/GlobalVar.h (to set a different ntp server);

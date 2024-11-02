@@ -3,10 +3,34 @@
 //#define ELEGO_IR
 //#define SAMS_IR
 //#define CARMP3
-//#define PHILIPS-RC5340
-#define KC808
+//#define PHILIPSRC5340
+//#define KC808
 //#define TANIX //SMART TV BOX TANIX TX5 MAX
-//
+#define ZODIAC
+#ifdef ZODIAC
+  #define IR_UP 0xFF7887
+  #define IR_UP1 0xF63C8657
+  #define IR_DN 0xFF6897
+  #define IR_DN1 0xC101E57B
+  #define IR_NX 0xFF708F
+  #define IR_NX1 0x44C407DB
+  #define IR_PV 0xFF28D7
+  #define IR_PV1 0x13549BDF
+  #define IR_RS 0xFFEA15
+  #define IR_RS1 0xA6C4637B
+
+  #define IR_00 0xFFAA55
+  #define IR_01 0xFFDA25
+  #define IR_02 0xFFF20D
+  #define IR_03 0xFFCA35
+  #define IR_04 0xFF5AA5
+  #define IR_05 0xFFF00F
+  #define IR_06 0xFF7A85
+  #define IR_07 0xFF6A95
+  #define IR_08 0xFF728D
+  #define IR_09 0xFF4AB5
+#endif
+
 #ifdef TANIX
   #define IR_UP 0x202D02F
   #define IR_UP_ALT 0x20218E7
@@ -67,7 +91,7 @@
   #define IR_100 0xFF9867
   #define IR_200 0xFFB04F
 #endif
-#ifdef PHILIPS-RC5340
+#ifdef PHILIPSRC5340
   #define IR_UP 0x10458
   #define IR_DN 0x10459
   #define IR_NX 0x1045B
