@@ -1,0 +1,35 @@
+/* Dimensioni */
+/* Placca anteriore pulsantiera e visore */
+/* Base Bp Altezza Hp Spessore Sp */
+Bp = 240;
+Hp = 70;
+Sp = 3;
+// Feritoia anteriore e posteriore cassetta
+Hf = 20 -1;
+Bf = 200 - 1;
+// Feritoia passaggio display 2"
+Bd = 70;
+Hd = 51;
+// Foro sensore IR e posizione
+Dir = 15;
+Xir = (Bp - Bd)/2 /2;
+Yir = 0;
+// Ingombro pulsanti
+Dp = 16;
+// Fori pulsanti radio/clock, volume e canale
+Dfp = 12;
+// Posizione pulsante modalita di funzionamento
+Xprc = Bp/2 + Bd/2 + (Bp/2 - Bd/2) / 2;
+Yprc = 0;
+// Posizione pulsante volume up
+Xpvup = Bp/2 + Bd/2 + (Bp/2 - Bd/2) / 2;
+Ypvup = 1.25 * Dp;
+// Posizione pulsante volume down
+Xpvdn = Bp/2 + Bd/2 + (Bp/2 - Bd/2) / 2;
+Ypvdn = -1.25 * Dp;
+// Posizione pulsante ch+
+Xpchp = Bp/2 + Bd/2 + (Bp/2 - Bd/2) / 2 + 1.25 * Dp ;
+Ypchp = 0;
+// Posizione pulsante volume ch-
+Xpchm = Bp/2 + Bd/2 + (Bp/2 - Bd/2) / 2 -1.25 * Dp;
+Ypchm = 0;
